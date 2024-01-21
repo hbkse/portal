@@ -1,14 +1,29 @@
 main();
 
-//
+/**
+ * Load a shader file from the shaders directory
+ */
+async function loadShaderFile(filename) {
+    const url = `./shaders/${filename}`;
+
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .catch(error => {
+            console.error(`Could not load file: ${url}`, error);
+        });
+}
+
 // Start here
-//
-function main() {
+async function main() {
   const canvas = document.querySelector("#glcanvas");
   const gl = canvas.getContext("webgl");
 
   // If we don't have a GL context, give up now
-
   if (!gl) {
     alert(
       "Unable to initialize WebGL. Your browser or machine may not support it."
@@ -17,25 +32,12 @@ function main() {
   }
 
   // Vertex shader program
-
-  const vsSource = `
-    attribute vec4 aVertexPosition;
-
-    uniform mat4 uModelViewMatrix;
-    uniform mat4 uProjectionMatrix;
-
-    void main() {
-      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-    }
-  `;
+  const vsSource = await loadShaderFile("default.vert")
 
   // Fragment shader program
+  const fsSource = await loadShaderFile("default.frag")
 
-  const fsSource = `
-    void main() {
-      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-  `;
+  console.log(vsSource)
 
   // Initialize a shader program; this is where all the lighting
   // for the vertices and so forth is established.
@@ -66,36 +68,30 @@ function main() {
   drawScene(gl, programInfo);
 }
 
-//
-// initBuffers
-//
-// Initialize the buffers we'll need. For this demo, we just
-// have one object -- a simple two-dimensional square.
-//
+/**
+ * Initialize the buffers we'll need. For this demo, we just
+ * have one object -- a simple two-dimensional square.
+ */
 function initBuffers(gl) {
   // Create a buffer for the square's positions.
-
   const positionBuffer = gl.createBuffer();
 
   // Select the positionBuffer as the one to apply buffer
   // operations to from here out.
-
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   // Now create an array of positions for the square.
-
   const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0];
 
   // Now pass the list of positions into WebGL to build the
   // shape. We do this by creating a Float32Array from the
   // JavaScript array, then use it to fill the current buffer.
-
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 }
 
-//
-// Draw the scene.
-//
+/**
+ * Draw the scene.
+ */
 function drawScene(gl, programInfo) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
@@ -179,9 +175,9 @@ function drawScene(gl, programInfo) {
   }
 }
 
-//
-// Initialize a shader program, so WebGL knows how to draw our data
-//
+/** 
+ * Initialize a shader program, so WebGL knows how to draw our data
+ */
 function initShaderProgram(gl, vsSource, fsSource) {
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
@@ -206,23 +202,20 @@ function initShaderProgram(gl, vsSource, fsSource) {
   return shaderProgram;
 }
 
-//
-// creates a shader of the given type, uploads the source and
-// compiles it.
-//
+/** 
+ * creates a shader of the given type, uploads the source and
+ * compiles it.
+ */
 function loadShader(gl, type, source) {
   const shader = gl.createShader(type);
 
   // Send the source to the shader object
-
   gl.shaderSource(shader, source);
 
   // Compile the shader program
-
   gl.compileShader(shader);
 
   // See if it compiled successfully
-
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     alert(
       "An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader)
