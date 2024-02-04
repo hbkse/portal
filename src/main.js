@@ -1,27 +1,13 @@
+import defaultFragShaderSource from './shaders/default.frag'
+import defaultVertShaderSource from './shaders/default.vert'
+
 main();
-
-/**
- * Load a shader file from the shaders directory
- */
-async function loadShaderFile(filename) {
-    const url = `./shaders/${filename}`;
-
-    return fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .catch(error => {
-            console.error(`Could not load file: ${url}`, error);
-        });
-}
 
 // Start here
 async function main() {
   const canvas = document.querySelector("#glcanvas");
   const gl = canvas.getContext("webgl");
+  console.log(defaultFragShaderSource)
 
   // If we don't have a GL context, give up now
   if (!gl) {
