@@ -1,12 +1,3 @@
-// attribute vec4 aVertexPosition;
-
-//uniform mat4 uModelViewMatrix;
-//uniform mat4 uProjectionMatrix;
-
-//void main() {
-//    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-//}
-
 #version 300 es
 // vertex.glsl - from the OpenGL SuperBible Sixth Edition
 
@@ -20,3 +11,12 @@ void main(void)
 
     gl_Position = vertices[gl_VertexID];
 }
+
+// attribute vec4 aVertexPosition;
+
+//uniform mat4 uModelViewMatrix;
+//uniform mat4 uProjectionMatrix;
+
+//void main() {
+//    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+//}

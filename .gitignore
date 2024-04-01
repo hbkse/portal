@@ -35,3 +35,4 @@ yarn-error.log*
 *.sass-cache
 
 # Optional npm cache directory
+dist/

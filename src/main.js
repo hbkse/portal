@@ -18,10 +18,10 @@ async function main() {
   }
 
   // Vertex shader program
-  const vsSource = await loadShaderFile("default.vert")
+  const vsSource = defaultVertShaderSource;
 
   // Fragment shader program
-  const fsSource = await loadShaderFile("default.frag")
+  const fsSource = defaultFragShaderSource;
 
   console.log(vsSource)
 
