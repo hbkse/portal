@@ -6,8 +6,9 @@ main();
 // Start here
 async function main() {
   const canvas = document.querySelector("#glcanvas");
-  const gl = canvas.getContext("webgl");
-  console.log(defaultFragShaderSource)
+  const gl = canvas.getContext("webgl2");
+
+  console.log("ts");
 
   // If we don't have a GL context, give up now
   if (!gl) {
@@ -22,8 +23,6 @@ async function main() {
 
   // Fragment shader program
   const fsSource = defaultFragShaderSource;
-
-  console.log(vsSource)
 
   // Initialize a shader program; this is where all the lighting
   // for the vertices and so forth is established.

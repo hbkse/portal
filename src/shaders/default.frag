@@ -7,9 +7,5 @@ out vec4 color;
 
 void main(void)
 {
-    color = vec4(1.0, 0.0, 0.0, 1.0);
+    color = vec4(0.7, 0.3, 0.5, 1.0);
 }
-
-//void main() {
-//    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-//}
