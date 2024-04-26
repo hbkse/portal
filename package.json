@@ -22,6 +22,7 @@
   "devDependencies": {
     "file-loader": "^6.2.0",
     "glslify-loader": "^2.0.0",
+    "gl-matrix": "^3.4.3",
     "raw-loader": "^4.0.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.3",

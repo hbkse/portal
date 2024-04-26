@@ -1,11 +1,13 @@
+// import * as glm from 'gl-matrix';
 import defaultFragShaderSource from './shaders/default.frag'
 import defaultVertShaderSource from './shaders/default.vert'
+import { mat4 } from 'gl-matrix'
 
 main();
 
 // Start here
 async function main() {
-  const canvas = document.querySelector("#glcanvas");
+  const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;;
   const gl = canvas.getContext("webgl2");
 
   console.log("ts");
@@ -26,7 +28,7 @@ async function main() {
 
   // Initialize a shader program; this is where all the lighting
   // for the vertices and so forth is established.
-  const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+  const shaderProgram = initShaderProgram(gl, vsSource, fsSource) as WebGLProgram;
 
   // Collect all the info needed to use the shader program.
   // Look up which attribute our shader program is using
@@ -57,7 +59,7 @@ async function main() {
  * Initialize the buffers we'll need. For this demo, we just
  * have one object -- a simple two-dimensional square.
  */
-function initBuffers(gl) {
+function initBuffers(gl: WebGL2RenderingContext) {
   // Create a buffer for the square's positions.
   const positionBuffer = gl.createBuffer();
 
@@ -77,7 +79,7 @@ function initBuffers(gl) {
 /**
  * Draw the scene.
  */
-function drawScene(gl, programInfo) {
+function drawScene(gl: WebGL2RenderingContext, programInfo: any) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -95,7 +97,8 @@ function drawScene(gl, programInfo) {
   // and 100 units away from the camera.
 
   const fieldOfView = (45 * Math.PI) / 180; // in radians
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const canvas = gl.canvas as HTMLCanvasElement;
+  const aspect = canvas.clientWidth / canvas.clientHeight;
   const zNear = 0.1;
   const zFar = 100.0;
   const projectionMatrix = mat4.create();
@@ -163,13 +166,13 @@ function drawScene(gl, programInfo) {
 /** 
  * Initialize a shader program, so WebGL knows how to draw our data
  */
-function initShaderProgram(gl, vsSource, fsSource) {
-  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
-  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+function initShaderProgram(gl: WebGL2RenderingContext, vsSource: string, fsSource: string) {
+  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource) as WebGLShader;
+  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource) as WebGLShader;
 
   // Create the shader program
 
-  const shaderProgram = gl.createProgram();
+  const shaderProgram = gl.createProgram() as WebGLProgram;
   gl.attachShader(shaderProgram, vertexShader);
   gl.attachShader(shaderProgram, fragmentShader);
   gl.linkProgram(shaderProgram);
@@ -187,12 +190,14 @@ function initShaderProgram(gl, vsSource, fsSource) {
   return shaderProgram;
 }
 
+
+type ShaderTypes = WebGL2RenderingContext['FRAGMENT_SHADER'] | WebGL2RenderingContext['VERTEX_SHADER'];
 /** 
  * creates a shader of the given type, uploads the source and
  * compiles it.
  */
-function loadShader(gl, type, source) {
-  const shader = gl.createShader(type);
+function loadShader(gl: WebGL2RenderingContext, type: ShaderTypes, source: string) {
+  const shader = gl.createShader(type) as WebGLShader;
 
   // Send the source to the shader object
   gl.shaderSource(shader, source);
