@@ -1,16 +1,14 @@
-// import * as glm from 'gl-matrix';
 import defaultFragShaderSource from './shaders/default.frag'
 import defaultVertShaderSource from './shaders/default.vert'
 import { mat4 } from 'gl-matrix'
 
+type ShaderTypes = WebGL2RenderingContext['FRAGMENT_SHADER'] | WebGL2RenderingContext['VERTEX_SHADER'];
+
 main();
 
-// Start here
 async function main() {
   const canvas = document.querySelector("#glcanvas") as HTMLCanvasElement;;
   const gl = canvas.getContext("webgl2");
-
-  console.log("ts");
 
   // If we don't have a GL context, give up now
   if (!gl) {
@@ -86,7 +84,6 @@ function drawScene(gl: WebGL2RenderingContext, programInfo: any) {
   gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
   // Clear the canvas before we start drawing on it.
-
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // Create a perspective matrix, a special matrix that is
@@ -95,7 +92,6 @@ function drawScene(gl: WebGL2RenderingContext, programInfo: any) {
   // ratio that matches the display size of the canvas
   // and we only want to see objects between 0.1 units
   // and 100 units away from the camera.
-
   const fieldOfView = (45 * Math.PI) / 180; // in radians
   const canvas = gl.canvas as HTMLCanvasElement;
   const aspect = canvas.clientWidth / canvas.clientHeight;
@@ -113,7 +109,6 @@ function drawScene(gl: WebGL2RenderingContext, programInfo: any) {
 
   // Now move the drawing position a bit to where we want to
   // start drawing the square.
-
   mat4.translate(
     modelViewMatrix, // destination matrix
     modelViewMatrix, // matrix to translate
@@ -140,11 +135,9 @@ function drawScene(gl: WebGL2RenderingContext, programInfo: any) {
   }
 
   // Tell WebGL to use our program when drawing
-
   gl.useProgram(programInfo.program);
 
   // Set the shader uniforms
-
   gl.uniformMatrix4fv(
     programInfo.uniformLocations.projectionMatrix,
     false,
@@ -171,14 +164,12 @@ function initShaderProgram(gl: WebGL2RenderingContext, vsSource: string, fsSourc
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource) as WebGLShader;
 
   // Create the shader program
-
   const shaderProgram = gl.createProgram() as WebGLProgram;
   gl.attachShader(shaderProgram, vertexShader);
   gl.attachShader(shaderProgram, fragmentShader);
   gl.linkProgram(shaderProgram);
 
   // If creating the shader program failed, alert
-
   if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
     alert(
       "Unable to initialize the shader program: " +
@@ -190,11 +181,8 @@ function initShaderProgram(gl: WebGL2RenderingContext, vsSource: string, fsSourc
   return shaderProgram;
 }
 
-
-type ShaderTypes = WebGL2RenderingContext['FRAGMENT_SHADER'] | WebGL2RenderingContext['VERTEX_SHADER'];
 /** 
- * creates a shader of the given type, uploads the source and
- * compiles it.
+ * Creates a shader of the given type, uploads the source and compiles it.
  */
 function loadShader(gl: WebGL2RenderingContext, type: ShaderTypes, source: string) {
   const shader = gl.createShader(type) as WebGLShader;
